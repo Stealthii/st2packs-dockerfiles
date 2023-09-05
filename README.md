@@ -1,4 +1,4 @@
-[![Go to Docker Hub](https://img.shields.io/docker/build/stackstorm/st2packs.svg)](https://hub.docker.com/r/stackstorm/st2packs/)
+[![Go to Docker Hub](https://img.shields.io/docker/cloud/build/stackstorm/st2packs)](https://hub.docker.com/r/stackstorm/st2packs/)
 
 # Overview
 
