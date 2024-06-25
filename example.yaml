@@ -2,7 +2,9 @@
 # Base stackstorm image and tag to build against
 base:
   image: stackstorm/st2
-  tag: "3.8"
+  tags:
+    - "3.8"
+    - "3.9dev"
 
 # Pack image
 pack_image:
