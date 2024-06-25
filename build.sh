@@ -30,13 +30,23 @@ for pack in $packs; do
 	echo "  - $pack"
 done
 
+built=""
+
 # Build the Docker image for each base tag
 for base_tag in $base_tags; do
+	tag="$pack_image:${pack_image_version}-$base_tag"
 	echo "Building for base tag: $base_tag"
 	docker build . \
 		--platform linux/amd64 \
-		--tag $pack_image:${pack_image_version}-$base_tag \
+		--tag $tag \
 		--build-arg BASE_IMAGE=$base_image \
 		--build-arg BASE_IMAGE_TAG=$base_tag \
 		--build-arg PACKS="$packs"
+	built="$built $tag"
+done
+
+# List pack images that were built
+echo "Built the following images:"
+for entry in $built; do
+	echo "  - $entry"
 done
