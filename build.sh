@@ -12,19 +12,19 @@ fi
 # Parse the YAML file
 base_image=$(yq e '.base.image' $yaml_file)
 base_tag=$(yq e '.base.tag' $yaml_file)
-pack_image=$(yq e '.pack.image' $yaml_file)
-pack_tag=$(yq e '.pack.tag' $yaml_file)
+pack_image=$(yq e '.pack_image.image' $yaml_file)
+pack_image_version=$(yq e '.pack_image.version' $yaml_file)
 # Handle unspecified ref as HEAD
-packs=$(yq e '.pack.packs[] | .pack + "=" + (.ref // "HEAD")' $yaml_file | tr '\n' ' ' | sed -e's/=HEAD//g')
+packs=$(yq e '.pack_image.packs[] | .pack + "=" + (.ref // "HEAD")' $yaml_file | tr '\n' ' ' | sed -e's/=HEAD//g')
 
 # Check if all variables are set
-if [[ -z "$base_image" ]] || [[ -z "$base_tag" ]] || [[ -z "$pack_image" ]] || [[ -z "$pack_tag" ]] || [[ -z "$packs" ]]; then
+if [[ -z "$base_image" ]] || [[ -z "$base_tag" ]] || [[ -z "$pack_image" ]] || [[ -z "$pack_image_version" ]] || [[ -z "$packs" ]]; then
 	echo "One or more required variables are not set."
 	exit 1
 fi
 
 echo "Base image: $base_image:$base_tag"
-echo "Pack image: $pack_image:$pack_tag"
+echo "Pack image: $pack_image:${pack_image_version}-$base_tag"
 echo "Packs:"
 for pack in $packs; do
 	echo "  - $pack"
@@ -33,7 +33,7 @@ done
 # Build the Docker image
 docker build . \
 	--platform linux/amd64 \
-	--tag $pack_image:$pack_tag \
+	--tag $pack_image:${pack_image_version}-$base_tag \
 	--build-arg BASE_IMAGE=$base_image \
 	--build-arg BASE_IMAGE_TAG=$base_tag \
 	--build-arg PACKS="$packs"

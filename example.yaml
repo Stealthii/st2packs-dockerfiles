@@ -5,9 +5,9 @@ base:
   tag: "3.8"
 
 # Pack image
-pack:
+pack_image:
   image: company/stackstorm/pack-example
-  tag: "1.0-3.8"
+  version: "1.0"
   packs:
     - pack: pagerduty
       ref: "v2.0.0"
